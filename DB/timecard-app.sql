@@ -19,11 +19,8 @@ create database Timecard;
       ProjectID serial not null primary key,
       ProjectCode varchar(20) unique,
       ProjectDescription text,
-      PortfolioID int not null,
-      ProjectTypeID int not null,
-
-      constraint fk_project_projecttype_ProjectTypeID FOREIGN KEY references ProjectType(ProjectTypeID),
-      constraint fk_project_portfolio_PortfolioID FOREIGN KEY references portfolio(PortfolioID)
+      PortfolioID int not null references Portfolio(PortfolioID),
+      ProjectTypeID int not null references ProjectType(ProjectTypeID)
     )
 
     create table Person(
@@ -38,18 +35,13 @@ create database Timecard;
 
     create table Timecard(
       TimecardID serial not null primary key,
-      PersonID int not null,
-      PeriodEndDate date not null,
-
-      constraint fk_timecard_person_PersonID foreign key references Person(PersonID)
+      PersonID int not null references Person(PersonID),
+      PeriodEndDate date not null
     )
 
     create table TimecardEntry(
-      TimecardID int not null,
-      ProjectID int not null,
+      TimecardID int not null references timecard(TimecardID),
+      ProjectID int not null references project(ProjectID),
       Hours decimal,
-
-      constraint pk_timecardentry primary key (TimeCardID, ProjectID),
-      constraint fk_timecardentry_project_ProjectID foreign key references project(ProjectID),
-      constraint fk_timecardentry_timecard_TimecardID foreign key references timecard(TimecardID)
+      primary key (TimeCardID, ProjectID)
     );
