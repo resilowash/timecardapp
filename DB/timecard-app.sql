@@ -1,52 +1,55 @@
-create database timecard
+/*
+create database Timecard;
+  \c Timecard
+  */
   create schema ta
 
-    create table portfolio(
-      portfolio-id serial not null primary key,
-      portfolio-code varchar(20) unique,
-      portfolio-description text
+    create table Portfolio(
+      PortfolioID serial not null primary key,
+      PortfolioCode varchar(20) unique,
+      PortfolioDescription text
     )
 
-    create table projecttype(
-      project-type-id serial not null primary key,
-      project-type-name varchar(100)
+    create table ProjectType(
+      ProjectTypeID serial not null primary key,
+      ProjectTypeName varchar(100)
     )
 
-    create table project(
-      project-id serial not null primary key,
-      project-code varchar(20) unique,
-      project-description text,
-      portfolio-id int not null,
-      project-type-id int not null,
+    create table Project(
+      ProjectID serial not null primary key,
+      ProjectCode varchar(20) unique,
+      ProjectDescription text,
+      PortfolioID int not null,
+      ProjectTypeID int not null,
 
-      constraint fk_project_projecttype_project-type-id FOREIGN KEY references projecttype(project-type-id),
-      constraint fk_project_portfolio_portfolio-id FOREIGN KEY reference portfolio(portfolio-id)
+      constraint fk_project_projecttype_ProjectTypeID FOREIGN KEY references ProjectType(ProjectTypeID),
+      constraint fk_project_portfolio_PortfolioID FOREIGN KEY references portfolio(PortfolioID)
     )
 
-    create table person(
-      person-id serial not null primary key,
-      user-name varchar(30) not null unique,
-      email varchar(200) not null unique,
-      first-name varchar(100) not null,
-      last-name varchar(100) not null,
-      salt varchar(100) not null,
-      pw varchar(250) not null
+    create table Person(
+      PersonID serial not null primary key,
+      UserName varchar(30) not null unique,
+      Email varchar(200) not null unique,
+      FirstName varchar(100) not null,
+      LastName varchar(100) not null,
+      Salt varchar(100) not null,
+      PW varchar(250) not null
     )
 
-    create table timecard(
-      timecard-id serial not null primary key,
-      person-id int not null,
-      period-end-date date not null,
+    create table Timecard(
+      TimecardID serial not null primary key,
+      PersonID int not null,
+      PeriodEndDate date not null,
 
-      constraint fk_timecard_person_personID foreign key references person(person-id)
+      constraint fk_timecard_person_PersonID foreign key references Person(PersonID)
     )
 
-    create table timecardentry(
-      timecard-id int not null,
-      project-id int not null,
-      hours decimal,
+    create table TimecardEntry(
+      TimecardID int not null,
+      ProjectID int not null,
+      Hours decimal,
 
-      constraint pk_timecardentry primary key (timecard-id, project-id),
-      constraint fk_timecardentry_project_projectid foreign key references project(project-id),
-      constraint fk_timecardentry_timecard_timecardid foreign key references timecard(timecard-id)
-    ); 
+      constraint pk_timecardentry primary key (TimeCardID, ProjectID),
+      constraint fk_timecardentry_project_ProjectID foreign key references project(ProjectID),
+      constraint fk_timecardentry_timecard_TimecardID foreign key references timecard(TimecardID)
+    );
